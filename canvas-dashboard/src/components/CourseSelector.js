@@ -1,26 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { getCourses, getCurrentUser } from '../api';
+import React from 'react';
 
-const CourseSelector = ({ onCourseSelect }) => {
-    const [courses, setCourses] = useState([]);
-    const [user, setUser] = useState(null);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const userData = await getCurrentUser();
-            if (userData) {
-                setUser(userData);
-                const fetchedCourses = await getCourses(userData.id, 'active');
-                setCourses(fetchedCourses);
-            }
-        };
-        fetchData();
-    }, []);
-
+const CourseSelector = ({ courses, onCourseSelect }) => {
     return (
         <div className="course-selector">
-            <h2>Select a Course</h2>
-            {user && <p>Welcome, {user.name}</p>}
+            <h3>Select a Course</h3>
             <ul>
                 {courses.map((course) => (
                     <li key={course.id} onClick={() => onCourseSelect(course)}>

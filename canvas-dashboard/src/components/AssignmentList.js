@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { getAssignments } from '../api';
+import React from 'react';
 
-const AssignmentList = ({ course }) => {
-    const [assignments, setAssignments] = useState([]);
-
-    useEffect(() => {
-        const fetchAssignments = async () => {
-            const fetchedAssignments = await getAssignments(course.id);
-            setAssignments(fetchedAssignments);
-        };
-        fetchAssignments();
-    }, [course]);
-
+const AssignmentList = ({ course, assignments }) => {
     return (
         <div className="assignment-list">
             <h3>Assignments for {course.name}</h3>
             <ul>
-                {assignments.map((assignment) => (
-                    <li key={assignment.id}>
+                {assignments.map((assignment, index) => (
+                    <li key={index}>
                         {assignment.name} - Due: {assignment.due_at}
                     </li>
                 ))}
