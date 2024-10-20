@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { getEnrollments } from '../api';
+import {
+    Card,
+    CardContent,
+    Typography,
+    List,
+    ListItem,
+    Checkbox,
+    Divider,
+    Box,
+    Avatar,
+} from '@mui/material';
 
 const AssignmentList = ({ course, assignments }) => {
     const [people, setPeople] = useState([]);
@@ -13,6 +24,7 @@ const AssignmentList = ({ course, assignments }) => {
     }, [course]);
 
     const formatDueDate = (dueDate) => {
+        if (!dueDate) return '';
         try {
             const parsedTime = new Date(dueDate);
             return parsedTime.toLocaleString();
@@ -31,51 +43,74 @@ const AssignmentList = ({ course, assignments }) => {
     };
 
     return (
-        <div className="assignment-list">
-            <h3>Assignments for {course.name}</h3>
+        <Box sx={{ padding: 2 }}>
+            <Typography variant="h4" gutterBottom>
+                Assignments for {course.name}
+            </Typography>
 
             {/* Past Due Assignments */}
             {sortedAssignments.pastDue.length > 0 && (
-                <>
-                    <h4>Past Due Assignments</h4>
-                    <ul>
-                        {sortedAssignments.pastDue.map((assignment, index) => (
-                            <li key={index}>
-                                <input type="checkbox" />
-                                {assignment.name} - Due: {formatDueDate(assignment.due_at)}
-                            </li>
-                        ))}
-                    </ul>
-                </>
+                <Card variant="outlined" sx={{ marginBottom: 2 }}>
+                    <CardContent>
+                        <Typography variant="h6" color="error">
+                            Past Due Assignments
+                        </Typography>
+                        <List>
+                            {sortedAssignments.pastDue.map((assignment, index) => (
+                                <ListItem key={index}>
+                                    <Checkbox />
+                                    <Typography variant="body1">
+                                        {assignment.name} - Due: {formatDueDate(assignment.due_at)}
+                                    </Typography>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </CardContent>
+                </Card>
             )}
 
             {/* Upcoming Assignments */}
             {sortedAssignments.upcoming.length > 0 && (
-                <>
-                    <h4>Upcoming Assignments</h4>
-                    <ul>
-                        {sortedAssignments.upcoming.map((assignment, index) => (
-                            <li key={index}>
-                                <input type="checkbox" />
-                                {assignment.name} - Due: {formatDueDate(assignment.due_at)}
-                            </li>
-                        ))}
-                    </ul>
-                </>
+                <Card variant="outlined" sx={{ marginBottom: 2 }}>
+                    <CardContent>
+                        <Typography variant="h6" color="primary">
+                            Upcoming Assignments
+                        </Typography>
+                        <List>
+                            {sortedAssignments.upcoming.map((assignment, index) => (
+                                <ListItem key={index}>
+                                    <Checkbox />
+                                    <Typography variant="body1">
+                                        {assignment.name} - Due: {formatDueDate(assignment.due_at)}
+                                    </Typography>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </CardContent>
+                </Card>
             )}
 
             {/* People to Reach Out to */}
-            <h3>Need Help? Reach out to these people!</h3>
-            <ul>
-                {people.length > 0 ? (
-                    people.map((person, index) => (
-                        <li key={index}>{person.name} ({person.role})</li>
-                    ))
-                ) : (
-                    <li>No TAs or graders available for this course.</li>
-                )}
-            </ul>
-        </div>
+            <Card variant="outlined">
+                <CardContent>
+                    <Typography variant="h6">Need Help? Reach out to these people!</Typography>
+                    <List>
+                        {people.length > 0 ? (
+                            people.map((person, index) => (
+                                <ListItem key={index} sx={{ alignItems: 'center' }}>
+                                    <Avatar sx={{ marginRight: 2 }}>{person.name[0]}</Avatar>
+                                    <Typography variant="body1">{person.name} ({person.role})</Typography>
+                                </ListItem>
+                            ))
+                        ) : (
+                            <Typography variant="body1" color="textSecondary">
+                                No TAs or graders available for this course.
+                            </Typography>
+                        )}
+                    </List>
+                </CardContent>
+            </Card>
+        </Box>
     );
 };
 

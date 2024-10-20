@@ -93,10 +93,9 @@ def get_enrollments(course_id):
                     'GraderEnrollment': 'Grader',
                     'StudentEnrollment': 'Student',
                     'TeacherEnrollment': 'Teacher'
-                    # Fix key to match actual enrollment type key
-                }.get(enrollment['type'], enrollment['type'])
+                }.get(enrollment['role'], enrollment['role'])
             }
-            for enrollment in enrollments if enrollment['type'] in ['TaEnrollment', 'GraderEnrollment']
+            for enrollment in enrollments if enrollment['role'] in ['TaEnrollment', 'GraderEnrollment']
         ]
         return jsonify(relevant_people)
     return jsonify({'error': 'Unable to fetch enrollments'}), 500
